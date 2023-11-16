@@ -1,7 +1,8 @@
 import { Sun } from "../Icons/Sun"
 import { Moon } from "../Icons/Moon"
-import { persons } from "../../data/persons"
 import { Button } from "../Button/Button"
+import { MouseEvent, useState } from "react"
+import { Modal } from "../Modal/Modal"
 
 interface ThemeType {
   dark: boolean
@@ -9,8 +10,30 @@ interface ThemeType {
 }
 
 const HeaderRectComponent = ({ dark, setDark }: ThemeType) => {
+  const [login, setLogin] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+  const [person, setPerson] = useState('')
+
   const handleChangeTheme = () => setDark(!dark)
-  const hendleLogin = () => alert('Login')
+
+  const hendleLogin = () => {
+    if (!login) {
+      setOpenModal(!openModal)
+    } else {
+      if (window.confirm('Are you sure you want to log out?')) {
+        setLogin(!login)
+        setPerson('')
+      }
+    } 
+  }
+
+  const hendleModal = (e: MouseEvent<HTMLLIElement>) => {
+    setOpenModal(!openModal)
+    if (e.target) {
+      setLogin(true)
+      setPerson((e.target as HTMLLIElement).textContent || '')
+    }
+  }
 
   return (
     <header className={
@@ -18,10 +41,9 @@ const HeaderRectComponent = ({ dark, setDark }: ThemeType) => {
       ${dark ? 'bg-gray-800 text-gray-100' : 'bg-gray-300 text-gray-700'}`
     }>
       <Button onClick={ handleChangeTheme }>{ dark ? <Sun /> : <Moon /> }</Button>
-      <ul className='flex'>
-        {persons.map((person) => <li className="mx-4" key={person.id}>{ person.name }</li>)}
-      </ul>
-      <Button onClick={ hendleLogin } background>Log in</Button>  
+      { person && <p className="mx-4">Hello 👋 { person }</p> }
+      <Button onClick={ hendleLogin } background>{login ? 'Log out' : 'Log in' }</Button>
+      { openModal && <Modal onClick={ hendleModal } /> }
     </header>
   )
 }
