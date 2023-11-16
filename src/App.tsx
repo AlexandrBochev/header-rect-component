@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react"
+import { HeaderRectComponent } from "./components/HeaderRectComponent/HeaderRectComponent"
 
-function App() {
+const App = () => {
+  const [dark, setDark] = useState(true)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <HeaderRectComponent dark={ dark } setDark={ setDark } />
+      <main className={
+        `w-full h-screen flex items-center justify-center font-bold text-xl
+        ${dark && 'bg-gray-600'}`}>
+        <h1>Main Content</h1>
+      </main>
+    </>
+  )
 }
 
-export default App;
+export { App }
